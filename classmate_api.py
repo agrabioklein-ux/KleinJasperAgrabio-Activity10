@@ -1,19 +1,28 @@
 
 import requests
 
-url = "https://balcenajessicaann.onrender.com/student"
+URL = "https://balcenajessicaann.onrender.com/student"
 
-response = requests.get(url, timeout=30)
+def get_classmate_data():
+    try:
+        response = requests.get(URL, timeout=30)
+        response.raise_for_status()
 
-print("Status Code:", response.status_code)
+        data = response.json()
+        return data
 
-if response.status_code == 200:
-    data = response.json()
+    except requests.exceptions.RequestException as error:
+        print("Classmate API connection failed:", error)
+        return None
 
-    print("Classmate API Data:")
-    for key, value in data.items():
-        print(f"{key}: {value}")
-else:
-    print("Request failed.")
-    print("Status Code:", response.status_code)
-    print(response.text)
+    except ValueError:
+        print("Invalid JSON response from Classmate API.")
+        return None
+
+
+if __name__ == "__main__":
+    data = get_classmate_data()
+
+    if data is not None:
+        print("Classmate API Data:")
+        print(data)
