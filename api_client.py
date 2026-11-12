@@ -1,16 +1,25 @@
 
 import requests
 
-url = "https://kleinjasperagrabio.onrender.com/course"
+URL = "https://kleinjasperagrabio.onrender.com/course"
 
-response = requests.get(url)
+def get_course_data():
+    try:
+        response = requests.get(URL, timeout=30)
+        response.raise_for_status()
 
-if response.status_code == 200:
-    data = response.json()
+        data = response.json()
 
-    print("Course Code:", data["course_code"])
-    print("Course Name:", data["course_name"])
-    print("Instructor:", data["instructor"])
-else:
-    print("Request failed.")
-    print("Status Code:", response.status_code)
+        print("Course Code:", data.get("course_code", "N/A"))
+        print("Course Name:", data.get("course_name", "N/A"))
+        print("Instructor:", data.get("instructor", "N/A"))
+
+    except requests.exceptions.RequestException as error:
+        print("Request failed:", error)
+
+    except ValueError:
+        print("Invalid JSON response.")
+
+
+if __name__ == "__main__":
+    get_course_data()
