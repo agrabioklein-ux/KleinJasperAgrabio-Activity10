@@ -6,9 +6,7 @@ from pathlib import Path
 from flask import Flask, jsonify, request, render_template
 
 app = Flask(__name__)
-app.secret_key = os.environ.get(
-    "SECRET_KEY", "activity9-integration-secret-key"
-)
+app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(32)
 
 # ==================================================
 # CONFIGURATION
@@ -23,7 +21,6 @@ PARTNER_API_URL = os.environ.get(
 )
 
 # Classmate's POST endpoint
-# Confirm that the classmate's API supports POST here.
 PARTNER_POST_URL = os.environ.get(
     "PARTNER_POST_URL",
     "https://balcenajessicaann-2axr.onrender.com/api/students"
@@ -578,5 +575,5 @@ if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         port=int(os.environ.get("PORT", 5000)),
-        debug=True
+        debug=False
     )
